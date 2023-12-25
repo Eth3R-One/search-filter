@@ -4,13 +4,12 @@ import { useState } from "react";
 
 const TABLE_HEAD = ["", "Name", "Email", "Gender"];
 
-export function Table({ search, searchCount = 0, setSearchCount }) {
+export function Table({ search }) {
   const isSearchedValid = (person) => {
     if (
       person.first_name.toLowerCase().includes(search) ||
       person.last_name.toLowerCase().includes(search) ||
-      person.email.toLowerCase().includes(search) ||
-      person.gender.toLowerCase().includes(search)
+      person.email.toLowerCase().includes(search)
     ) {
       return true;
     }
@@ -43,22 +42,18 @@ export function Table({ search, searchCount = 0, setSearchCount }) {
             // else if (person.first_name.toLowerCase().includes(search))
             //   return person;
             else if (
-              person.first_name.toLowerCase().includes(search) ||
-              person.last_name.toLowerCase().includes(search) ||
+              (person.first_name + " " + person.last_name)
+                .toLowerCase()
+                .includes(search) ||
               person.email.toLowerCase().includes(search)
             ) {
-              // setSearchCount((prev) => prev + 1);
-              // setSearchCount((prev) => prev + 1);
               return person;
             }
-            // isSearchedValid(person);
           }).map(({ id, first_name, last_name, email, gender }, index) => {
             const isLast = index === TABLE_ROWS.length - 1;
             const classes = isLast
               ? "p-4"
               : "p-4 border-b  border-blue-gray-50";
-            // setSearchCount(countSearcch);
-            console.log(searchCount);
             return (
               <tr key={id}>
                 <td className={classes}>
