@@ -1,20 +1,9 @@
 import { Card, Typography } from "@material-tailwind/react";
 import TABLE_ROWS from "./MOCK_DATA.json";
-import { useState } from "react";
 
 const TABLE_HEAD = ["", "Name", "Email", "Gender"];
 
-export function Table({ search }) {
-  const isSearchedValid = (person) => {
-    if (
-      person.first_name.toLowerCase().includes(search) ||
-      person.last_name.toLowerCase().includes(search) ||
-      person.email.toLowerCase().includes(search)
-    ) {
-      return true;
-    }
-    return false;
-  };
+export function Table({ person }) {
   return (
     <Card className="h-full w-full ">
       <table className="w-full min-w-max table-auto text-center">
@@ -37,67 +26,57 @@ export function Table({ search }) {
           </tr>
         </thead>
         <tbody>
-          {TABLE_ROWS.filter((person) => {
-            if (search === "") return person;
-            // else if (person.first_name.toLowerCase().includes(search))
-            //   return person;
-            else if (
-              (person.first_name + " " + person.last_name)
-                .toLowerCase()
-                .includes(search) ||
-              person.email.toLowerCase().includes(search)
-            ) {
-              return person;
-            }
-          }).map(({ id, first_name, last_name, email, gender }, index) => {
-            const isLast = index === TABLE_ROWS.length - 1;
-            const classes = isLast
-              ? "p-4"
-              : "p-4 border-b  border-blue-gray-50";
-            return (
-              <tr key={id}>
-                <td className={classes}>
-                  <Typography
-                    as="a"
-                    href="#"
-                    variant="small"
-                    color="blue-gray"
-                    className="font-medium"
-                  >
-                    {id}
-                  </Typography>
-                </td>
-                <td className={classes}>
-                  <Typography
-                    variant="small"
-                    color="blue-gray"
-                    className="font-normal"
-                  >
-                    {first_name} {last_name}
-                  </Typography>
-                </td>
+          {person?.map(
+            ({ id, first_name, last_name, email, gender }, index) => {
+              const isLast = index === TABLE_ROWS.length - 1;
+              const classes = isLast
+                ? "p-4"
+                : "p-4 border-b  border-blue-gray-50";
+              return (
+                <tr key={id}>
+                  <td className={classes}>
+                    <Typography
+                      as="a"
+                      href="#"
+                      variant="small"
+                      color="blue-gray"
+                      className="font-medium"
+                    >
+                      {id}
+                    </Typography>
+                  </td>
+                  <td className={classes}>
+                    <Typography
+                      variant="small"
+                      color="blue-gray"
+                      className="font-normal"
+                    >
+                      {first_name} {last_name}
+                    </Typography>
+                  </td>
 
-                <td className={classes}>
-                  <Typography
-                    variant="small"
-                    color="blue-gray"
-                    className="font-normal"
-                  >
-                    {email}
-                  </Typography>
-                </td>
-                <td className={classes}>
-                  <Typography
-                    variant="small"
-                    color="blue-gray"
-                    className="font-medium"
-                  >
-                    {gender === "M" ? "Male" : "Female"}
-                  </Typography>
-                </td>
-              </tr>
-            );
-          })}
+                  <td className={classes}>
+                    <Typography
+                      variant="small"
+                      color="blue-gray"
+                      className="font-normal"
+                    >
+                      {email}
+                    </Typography>
+                  </td>
+                  <td className={classes}>
+                    <Typography
+                      variant="small"
+                      color="blue-gray"
+                      className="font-medium"
+                    >
+                      {gender === "M" ? "Male" : "Female"}
+                    </Typography>
+                  </td>
+                </tr>
+              );
+            }
+          )}
         </tbody>
       </table>
     </Card>

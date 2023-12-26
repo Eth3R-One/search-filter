@@ -8,11 +8,13 @@ import TABLE_ROWS from "./MOCK_DATA.json";
 function App() {
   const [search, setSearch] = useState("");
   const [searchCount, setSearchCount] = useState(0);
+  const [filterByGender, setFilterByGender] = useState("all");
+  const [person, setPerson] = useState(TABLE_ROWS);
 
   useEffect(() => {
-    const totoalCount = TABLE_ROWS.filter((person) => {
+    const filteredPerson = TABLE_ROWS.filter((person) => {
       if (search === "") {
-        return;
+        return person;
       } else if (
         (person.first_name + " " + person.last_name)
           .toLowerCase()
@@ -20,10 +22,29 @@ function App() {
         person.email.toLowerCase().includes(search)
       )
         return person;
+    }).filter((person) => {
+      if (filterByGender === "all") return person;
+      else if (filterByGender === "m" && person.gender === "M") return person;
+      else if (filterByGender === "f" && person.gender === "F") return person;
     });
+    setSearchCount(filteredPerson.length);
+    setPerson(filteredPerson);
+  }, [search, filterByGender]);
 
-    setSearchCount(totoalCount.length);
-  }, [search]);
+  function handleOnchange(e) {
+    setFilterByGender(e.target.value);
+    setPerson(() => {
+      return search === ""
+        ? TABLE_ROWS
+        : person.filter((per) => {
+            if (filterByGender === "all") return person;
+            else if (filterByGender === "m" && per.gender === "M")
+              return person;
+            else if (filterByGender === "f" && per.gender === "F")
+              return person;
+          });
+    });
+  }
 
   return (
     <>
@@ -38,7 +59,14 @@ function App() {
               setSearch(e.target.value.toLowerCase());
             }}
           />
-          <button className="m-3 s-xl">Search</button>
+          <div>
+            <label>Filter </label>
+            <select defaultValue={"all"} onChange={handleOnchange}>
+              <option value="all">All</option>
+              <option value="m">Male</option>
+              <option value="f">Female</option>
+            </select>
+          </div>
           {search !== "" && (
             <div>
               Found {searchCount} result{searchCount > 1 ? "'s" : null}
@@ -47,7 +75,7 @@ function App() {
         </div>
       </div>
       <div className="flex m-auto p-5 md:container md:mx-auto">
-        <Table search={search} />
+        <Table person={person} />
       </div>
     </>
   );
