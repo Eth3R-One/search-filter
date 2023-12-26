@@ -75,7 +75,11 @@ function App() {
         </div>
       </div>
       <div className="flex m-auto p-5 md:container md:mx-auto">
-        <Table person={person} />
+        {search !== "" && searchCount === 0 ? (
+          <div className="">No result found</div>
+        ) : (
+          <Table person={person} />
+        )}
       </div>
     </>
   );
