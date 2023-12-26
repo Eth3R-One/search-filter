@@ -31,19 +31,11 @@ function App() {
     setPerson(filteredPerson);
   }, [search, filterByGender]);
 
-  function handleOnchange(e) {
+  function handleFilterOnChange(e) {
     setFilterByGender(e.target.value);
-    setPerson(() => {
-      return search === ""
-        ? TABLE_ROWS
-        : person.filter((per) => {
-            if (filterByGender === "all") return person;
-            else if (filterByGender === "m" && per.gender === "M")
-              return person;
-            else if (filterByGender === "f" && per.gender === "F")
-              return person;
-          });
-    });
+  }
+  function handleQueryChange(e) {
+    setSearch(e.target.value);
   }
 
   return (
@@ -55,13 +47,11 @@ function App() {
             className="s-xl p-3"
             type="text"
             placeholder="Search..."
-            onChange={(e) => {
-              setSearch(e.target.value.toLowerCase());
-            }}
+            onChange={handleQueryChange}
           />
           <div>
             <label>Filter </label>
-            <select defaultValue={"all"} onChange={handleOnchange}>
+            <select defaultValue={"all"} onChange={handleFilterOnChange}>
               <option value="all">All</option>
               <option value="m">Male</option>
               <option value="f">Female</option>
@@ -76,7 +66,9 @@ function App() {
       </div>
       <div className="flex m-auto p-5 md:container md:mx-auto">
         {search !== "" && searchCount === 0 ? (
-          <div className="">No result found</div>
+          <div className="text-3xl font-bold align-content-center">
+            No result found
+          </div>
         ) : (
           <Table person={person} />
         )}
